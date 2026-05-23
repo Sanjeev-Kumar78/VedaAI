@@ -39,7 +39,7 @@ export default function Sidebar({ isMobileDrawer = false, onClose }: SidebarProp
               width={36}
               height={36}
               className="w-15 h-15"
-              loading="eager"
+              priority
             />
             <span className="text-3xl font-bold tracking-tight -mt-4 text-[#1c1c1c] font-sans">
               VedaAI

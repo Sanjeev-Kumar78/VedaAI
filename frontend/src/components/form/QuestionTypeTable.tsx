@@ -210,7 +210,7 @@ export default function QuestionTypeTable() {
         <button
           type="button"
           onClick={addQuestionType}
-          className="flex items-center gap-2 text-sm font-bold text-[#1c1c1c] hover:text-[#f06e30] transition-colors cursor-pointer"
+          className="relative z-10 flex items-center gap-2 text-sm font-bold text-[#1c1c1c] hover:text-[#f06e30] transition-colors cursor-pointer"
         >
           <div className="w-8 h-8 rounded-full bg-[#121212] text-white flex items-center justify-center transition-colors">
             <svg
