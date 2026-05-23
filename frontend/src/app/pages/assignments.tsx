@@ -76,7 +76,7 @@ export default function Assignments() {
   }, []);
 
   useEffect(() => {
-    const socket = io(process.env.NEXT_PUBLIC_WS_URL || "ws://localhost:4000");
+    const socket = io({ path: "/socket.io" });
 
     socket.on("connected", () => console.log("Connected to WebSocket"));
 
