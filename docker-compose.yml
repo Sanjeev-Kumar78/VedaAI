@@ -1,0 +1,73 @@
+services:
+  mongodb:
+    image: mongo:latest
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db
+
+  redis:
+    image: redis:latest
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+
+  backend-api:
+    image: node:24-alpine
+    working_dir: /app
+    command: sh -c "npm install && npm run dev"
+    ports:
+      - "4000:4000"
+    env_file:
+      - ./backend/.env
+    environment:
+      MONGODB_URI: mongodb://mongodb:27017/vedaai
+      REDIS_URL: redis://redis:6379
+    volumes:
+      - ./backend:/app
+      - backend_api_node_modules:/app/node_modules
+    depends_on:
+      - mongodb
+      - redis
+
+  backend-worker:
+    image: node:24-alpine
+    working_dir: /app
+    command: sh -c "npm install && npm run dev:worker"
+    env_file:
+      - ./backend/.env
+    environment:
+      MONGODB_URI: mongodb://mongodb:27017/vedaai
+      REDIS_URL: redis://redis:6379
+    volumes:
+      - ./backend:/app
+      - backend_worker_node_modules:/app/node_modules
+    depends_on:
+      - mongodb
+      - redis
+
+  frontend:
+    image: node:24-alpine
+    working_dir: /app
+    command: sh -c "npm install && npm run dev -- --hostname 0.0.0.0"
+    ports:
+      - "80:3000"
+    env_file:
+      - ./frontend/.env
+    environment:
+      NEXT_PUBLIC_API_URL: http://localhost:4000
+      NEXT_PUBLIC_WS_URL: ws://localhost:4000
+    volumes:
+      - ./frontend:/app
+      - frontend_node_modules:/app/node_modules
+    depends_on:
+      - backend-api
+
+
+volumes:
+  mongodb_data:
+  redis_data:
+  backend_api_node_modules:
+  backend_worker_node_modules:
+  frontend_node_modules:
