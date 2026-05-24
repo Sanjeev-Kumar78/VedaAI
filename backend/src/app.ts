@@ -129,7 +129,7 @@ export function createApp() {
         }
         doc.moveDown(1);
 
-        section.questions.forEach((q) => {
+        section.questions.forEach((q: any) => {
           doc.x = 54;
           totalKeptQuestions++;
           const qNum = displayIndex++;
@@ -157,7 +157,7 @@ export function createApp() {
             const currentY = doc.y;
             
             const labels = ["A", "B", "C", "D"];
-            q.options.forEach((opt, optIdx) => {
+            q.options.forEach((opt: string, optIdx: number) => {
               const cleanedOpt = opt.replace(/^[A-D]\.\s*/i, "");
               const col = optIdx % 2;
               const row = Math.floor(optIdx / 2);
@@ -189,7 +189,7 @@ export function createApp() {
 
         let ansIndex = 1;
         activeSections.forEach((section) => {
-          section.questions.forEach((q) => {
+          section.questions.forEach((q: any) => {
             const num = ansIndex++;
             doc.font("Helvetica-Bold").fontSize(10).text(`Question ${num}: [${q.type}]`, { continued: true });
             doc.font("Helvetica").text(` - ${q.text}`);
