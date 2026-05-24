@@ -3,7 +3,7 @@
 import { use, useEffect, useState } from "react";
 import Link from "next/link";
 import { fetchAssignmentDetails, downloadPDF, regenerateAssignment } from "@/lib/api";
-import AssignmentTracker from "@/components/dashboard/AssignmentTracker";
+import { useRouter } from "next/navigation";
 
 interface Question {
   questionNumber: number;
@@ -50,7 +50,7 @@ export default function ViewAssignmentPage({
   const [loading, setLoading] = useState(true);
   const [isDownloading, setIsDownloading] = useState(false);
   const [showDownloadModal, setShowDownloadModal] = useState(false);
-  const [isRegenerating, setIsRegenerating] = useState(false);
+  const router = useRouter();
   const [isRegenPending, setIsRegenPending] = useState(false);
 
   const handleRegenerate = async () => {
@@ -63,7 +63,7 @@ export default function ViewAssignmentPage({
     try {
       const success = await regenerateAssignment(assignment._id);
       if (success) {
-        setIsRegenerating(true);
+        router.push("/");
       } else {
         alert("Failed to start regeneration. Please verify backend is running.");
       }
@@ -204,28 +204,6 @@ export default function ViewAssignmentPage({
         <Link href="/" className="bg-[#121212] hover:bg-[#2c2c2c] text-white py-3 px-6 rounded-full font-bold text-xs shadow-sm mt-2 transition-transform">
           Back to Dashboard
         </Link>
-      </div>
-    );
-  }
-
-  if (isRegenerating) {
-    return (
-      <div className="flex-1 py-10 pr-4">
-        <AssignmentTracker
-          assignmentId={id}
-          onComplete={async (newResult) => {
-            try {
-              const updated = await fetchAssignmentDetails(id);
-              setAssignment(updated);
-            } catch {
-              setAssignment((prev) => prev ? { ...prev, result: newResult, status: "completed" } : null);
-            }
-            setIsRegenerating(false);
-          }}
-          onCancel={() => {
-            setIsRegenerating(false);
-          }}
-        />
       </div>
     );
   }
