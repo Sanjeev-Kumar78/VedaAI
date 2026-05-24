@@ -126,7 +126,14 @@ const worker = new Worker<GenerationJobPayload>(
         });
 
         const rawText = response.text || "";
-        const cleanedText = rawText.replace(/```json/g, "").replace(/```/g, "").trim();
+        let cleanedText = rawText.replace(/```json/g, "").replace(/```/g, "").trim();
+        
+        // Robust extraction of the outermost JSON object to ignore trailing texts
+        const jsonMatch = cleanedText.match(/\{[\s\S]*\}/);
+        if (jsonMatch) {
+          cleanedText = jsonMatch[0];
+        }
+        
         const parsed = JSON.parse(cleanedText);
 
         if (parsed.sections && parsed.sections.length > 0) {
