@@ -24,6 +24,7 @@ services:
     environment:
       MONGODB_URI: mongodb://mongodb:27017/vedaai
       REDIS_URL: redis://redis:6379
+      CLIENT_ORIGIN: http://34.29.23.126
     volumes:
       - ./backend:/app
       - backend_api_node_modules:/app/node_modules
@@ -40,6 +41,7 @@ services:
     environment:
       MONGODB_URI: mongodb://mongodb:27017/vedaai
       REDIS_URL: redis://redis:6379
+      CLIENT_ORIGIN: http://34.29.23.126
     volumes:
       - ./backend:/app
       - backend_worker_node_modules:/app/node_modules
